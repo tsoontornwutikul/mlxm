@@ -33,11 +33,10 @@ Make sure you are in your project's directory where the `mlxm` directory is loca
 ### Train a simple fully-connected feed-forward neural network classifier for MNIST
 
 ```shell
-$ python -m mlxm.keras.experiments.train_classifier name=test-mnist model=mnist.fc \
-dataset=mnist dataset.flatten=1
+$ python -m mlxm.keras.experiments.train_classifier name=test model=mnist.fc dataset=mnist dataset.flatten=1
 ```
 
-Under the hood, a neural network for MNIST (defined in `mlxm.keras.models.mnist.fc`) is created with default parameters and is trained on the MNIST dataset (defined in `mlxm.keras.datasets.mnist`) with flattened inputs. All data related to training are saved under `./output/experiment/mnist.fc/test/`. Saved data include the parameters used, the model definition in YAML format, the training loss and error history, and the final model after training. Tensorboard data are also automatically saved under `./output/experiment-tb/mnist.fc/test/for-readme@<timestamp>`.
+Under the hood, a neural network (defined in `mlxm.keras.models.mnist.fc`) is created with default parameters and trained on the MNIST dataset (defined in `mlxm.keras.datasets.mnist`) with flattened inputs. All data related to training are saved under `./output/experiment/mnist.fc/test/`. Saved data include the parameters used, the model definition in YAML format, the training loss and error history, and the final model after training. Tensorboard data are also automatically saved under `./output/experiment-tb/mnist.fc/test@<timestamp>`.
 
 Note that if you try to run a new experiment under the same name for the same model, the program will simply exit without doing anything. This is to avoid accidentally replacing previous results. To override this behavior, append `forced=1` to the end of the command.
 
