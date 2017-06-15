@@ -2,6 +2,8 @@
 
 **mlxm** is a simple command line-based Python framework designed to help you run, manage and perform analyses on machine learning experiments in a unified manner.
 
+*This project is a work in progress. Expect subtle bugs and missing functionalities.*
+
 
 ## Installation
 
@@ -80,7 +82,7 @@ $ python -m mlxm.keras.experiments.train_classifier name=test model=mnist.fc mod
 
 This also allows values to have a dash (-) prefix (e.g. a negative value).
 
-### Why not just use <insert name of another framework>?
+### Why not just use \<insert name of another framework\>?
 
 We started with [pylearn2](https://github.com/lisa-lab/pylearn2) only to watch it getting slowly abandoned. The other frameworks that were available at that time we started this project did not match our requirements in a way that it was worth (partially) reinventing the wheel. In any case, please check out other frameworks/libraries to see if any of them matches your requirements better. Some of them are listed below, in no particular order:
 
