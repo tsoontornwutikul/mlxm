@@ -33,7 +33,8 @@ Make sure you are in your project's directory where the `mlxm` directory is loca
 ### Train a simple fully-connected feed-forward neural network classifier for MNIST
 
 ```shell
-$ python -m mlxm.keras.experiments.train_classifier name=test-mnist model=mnist.fc dataset=mnist dataset.flatten=1
+$ python -m mlxm.keras.experiments.train_classifier name=test-mnist model=mnist.fc \
+dataset=mnist dataset.flatten=1
 ```
 
 Under the hood, a neural network for MNIST (defined in `mlxm.keras.models.mnist.fc`) is created with default parameters and is trained on the MNIST dataset (defined in `mlxm.keras.datasets.mnist`) with flattened inputs. All data related to training are saved under `./output/experiment/mnist.fc/test/`. Saved data include the parameters used, the model definition in YAML format, the training loss and error history, and the final model after training. Tensorboard data are also automatically saved under `./output/experiment-tb/mnist.fc/test/for-readme@<timestamp>`.
@@ -42,22 +43,30 @@ Note that if you try to run a new experiment under the same name for the same mo
 
 ### Running it 5 times
 
-```shell
-$ python -m mlxm.experiments.run_multiple n=5 experiment=mlxm.keras.experiments.train_classifier name=test model=mnist.fc dataset=mnist dataset.flatten=1
-```
+Inserting `mlxm.experiments.run_multiple n=5 experiment=` before `mlxm.keras.experiments.train_classifier` will sequentially run 5 independent experiments whose results will be saved under `./output/experiment/mnist.fc/+test/1` through `./output/experiment/mnist.fc/+test/5`:
 
-This will run 10 independent experiments sequentially under `./output/experiment/mnist.fc/+test/1` through `./output/experiment/mnist.fc/+test/5`.
+```shell
+$ python -m mlxm.experiments.run_multiple n=5 experiment=mlxm.keras.experiments.train_classifier \
+name=test model=mnist.fc dataset=mnist dataset.flatten=1
+```
 
 ### Running a 5-fold cross-validation
 
+Adding `dataset.cv.folds=5` will cause it to train the model on 5 different cross-validation folds instead of the full training data 5 times. Note that the parameter `n` should be set to the same as the number of the folds in order to run all of the folds:
+
 ```shell
-$ python -m mlxm.experiments.run_multiple n=5 experiment=mlxm.keras.experiments.train_classifier name=test model=mnist.fc dataset=mnist dataset.flatten=1 dataset.cv.folds=5
+$ python -m mlxm.experiments.run_multiple n=5 experiment=mlxm.keras.experiments.train_classifier \
+name=test model=mnist.fc dataset=mnist dataset.flatten=1 dataset.cv.folds=5
 ```
 
 ### Running different variations (i.e. hyperparameter search)
 
+Use `mlxm.experiments.run_variations` to run different combinations of settings. Prepend a tilde (`~`) to each of the settings to be varied (this can cause problems on some Linux shells and thus is subject to change) and separate the values with slashes (`/`):
+
 ```shell
-$ python -m mlxm.experiments.run_variations experiment=mlxm.keras.experiments.train_classifier name=test model=mnist.fc ~model.dropout=0/0.2/0.5 dataset=mnist dataset.flatten=1 optimizer=adam ~optimizer.adam.lr=0.1/0.01/1e-3/1e-4/1e-5
+$ python -m mlxm.experiments.run_variations experiment=mlxm.keras.experiments.train_classifier \
+name=test model=mnist.fc ~model.dropout=0/0.2/0.5 dataset=mnist dataset.flatten=1 optimizer=adam \
+~optimizer.adam.lr=0.1/0.01/1e-3/1e-4/1e-5
 ```
 
 This will run a total of 15 (3 times 5) different combinations of learning rate and Dropout settings.
@@ -74,13 +83,17 @@ This project was originally created for personal research uses and thus the code
 
 ### Why not standard command line argument format?
 
-We found it easier to type and skim through the command this way:
+We found it easier to type and skim through long commands this way:
 
 ```shell
-$ python -m mlxm.keras.experiments.train_classifier name=test model=mnist.fc model.n_units=1000,1000,1000 model.activation=elu model.L2.weight=1e-6 model.dropinput=0.5 model.dropout=0.5 model.batchnorm=1 dataset=mnist dataset.flatten=1 dataset.n_train=50000 dataset.n_valid=10000 optimizer=adam optimizer.adam.lr=0.001 optimizer.adam.beta1=0.5 history.enabled=1 valid.every=1000 train.batch_size=128 train.batches=100000 path.result.main.base=/results path.result.tensorboard.base=/results-tensorboard
+$ python -m mlxm.keras.experiments.train_classifier name=test model=mnist.fc model.n_units=1000,1000,1000 \
+model.activation=elu model.L2.weight=1e-6 model.dropinput=0.5 model.dropout=0.5 model.batchnorm=1 dataset=mnist \
+dataset.flatten=1 dataset.n_train=50000 dataset.n_valid=10000 optimizer=adam optimizer.adam.lr=0.001 \
+optimizer.adam.beta1=0.5 history.enabled=1 valid.every=1000 train.batch_size=128 train.batches=100000 \
+path.result.main.base=/results path.result.tensorboard.base=/results-tensorboard
 ```
 
-This also allows values to have a dash (-) prefix (e.g. a negative value).
+This also allows values to have a dash (`-`) prefix (e.g. a negative value).
 
 ### Why not just use \<insert name of another framework\>?
 
