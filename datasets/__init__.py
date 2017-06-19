@@ -147,7 +147,6 @@ class InMemoryDataset(Dataset):
     def create_cv_data(train_data, test_data=None, cv_folds=5, cv_index=1):
 
         cv_index -= 1  # Make zero-based.
-        #has_test_already = 'test' in data and data['test'][0].shape[0] > 0
 
         N = train_data[0].shape[0]
         valid_index = cv_index
