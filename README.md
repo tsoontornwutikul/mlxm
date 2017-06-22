@@ -18,6 +18,7 @@ To use any part of the framework under the `keras` module, you will also need:
 
  - Keras 2
  - Tensorflow 1.0+
+ - h5py
  
 ### Setup
 
