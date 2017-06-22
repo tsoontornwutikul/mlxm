@@ -1,6 +1,8 @@
 import datetime
+import glob
 import gzip
 import numpy as np
+import os
 import pickle
 import sys
 import time
@@ -75,6 +77,23 @@ def save_pickle_gz(obj, filename, protocol=None):
     with gzip.open(filename, 'wb') as f:
         pickle.dump(obj, f, protocol)
 
+def load_pickle_gz(filename, protocol=None, raiseerror=True):
+
+    if not filename.lower().endswith('.gz'):
+        if not filename.lower().endswith('.pkl'):
+            filename += '.pkl'
+        filename += '.gz'
+
+    try:
+        with gzip.open(filename, 'rb') as f:
+            return pickle.load(f)
+    except:
+        print('[WARNING] Unpickle failed: {}'.format(filename))
+        if raiseerror:
+            raise
+        else:
+            return None
+
 def get_attribute(module, name, packages=None, use_cache=True):
     """Gets a named attribute of a module.
 
@@ -122,6 +141,13 @@ def to_categorical(y, num_classes=None):
     categorical = np.zeros((n, num_classes))
     categorical[np.arange(n), y] = 1
     return categorical
+
+def get_first_existing_path(*paths, default=None):
+    return next(filter(lambda path: path and os.path.exists(path), paths), default)
+
+def get_nth_matching_path(path_pattern, nth=0, default=None):
+    matched_paths = glob.glob(path_pattern)
+    return matched_paths[nth] if matched_paths else default
 
 class Timer(object):
 
