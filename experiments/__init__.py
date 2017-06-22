@@ -2,8 +2,26 @@ import os
 import retrying
 import sys
 import time
-from .. import BaseAction, ActionStatus
+from .. import BaseAction
 from ..helpers import get_attribute, get_multiprint, save_pickle_gz
+
+def get_results_path(config, model_experiment_name, filename=''):
+    config.define('path.result.main.base', 'path.result.base', default=Experiment.DEFAULT_RESULTS_ROOT)
+    path = os.path.join(config('path.result.main.base'), model_experiment_name)
+    if filename:
+        path = os.path.join(path, filename)
+    return path
+
+def get_child_experiments(base_path, max_index=1000):
+    if os.path.basename(base_path).startswith('+'):
+        for i in range(1, max_index+1):
+            path = os.path.join(base_path, str(i))
+            if os.path.exists(path):
+                yield path
+            else:
+                break
+    else:
+        yield base_path
 
 class BaseExperiment(BaseAction):
     pass
