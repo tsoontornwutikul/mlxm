@@ -103,8 +103,8 @@ def get_attribute(module, name, packages=None, use_cache=True):
         packages: list of str (optional). Packages to be searched in, ordered by priority.
     """
 
-    if use_cache and (module,name) in attribute_cache:
-        return attribute_cache[(module,name)]
+    if use_cache and (module,name,tuple(packages)) in attribute_cache:
+        return attribute_cache[(module,name,tuple(packages))]
 
     packages = packages or []
     packages.insert(0, None)
