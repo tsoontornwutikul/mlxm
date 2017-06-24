@@ -1,7 +1,12 @@
 import abc
 import itertools
 import numpy as np
-from ..helpers import to_categorical
+from ..helpers import to_categorical, get_attribute
+
+def get(name, config, extra_modules=None, create_func_name='create'):
+    extra_modules = extra_modules or []
+    f = get_attribute(name, create_func_name, ['datasets','mlxm.datasets','mlxm.keras.datasets']+extra_modules)
+    return f(config)
 
 class Dataset(object, metaclass=abc.ABCMeta):
 
