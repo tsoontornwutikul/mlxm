@@ -206,12 +206,14 @@ class InMemoryDataset(Dataset):
                 i = j
 
     def get_full_batch(self, which, input_parts=None, output_parts=None, batch_size_limit=None):
-        if batch_size_limit > 0:
+
+        if batch_size_limit is not None and batch_size_limit == 0:
+            return np.empty((0,*self.data_shape[which][1:]))
+
+        else:
             batch_size_limit = batch_size_limit or self.data_shape[which][0]
             iterator = self.create_batch_iterator(which, batch_size_limit, input_parts, output_parts)
             return next(iterator)
-        else:
-            return np.empty((0,*self.data_shape[which][1:]))
 
 class BatchSizeScheduler(object, metaclass=abc.ABCMeta):
 
