@@ -1,6 +1,6 @@
 import retrying
 import keras.callbacks
-from ... import experiments
+from ... import datasets, experiments
 from ...helpers import categorical_error, get_attribute, save_pickle_gz
 
 class BaseTrainClassifierExperiment(experiments.Experiment):
@@ -32,8 +32,7 @@ class BaseTrainClassifierExperiment(experiments.Experiment):
         return keras.callbacks.ModelCheckpoint(self.get_results_path('model-best.h5'), save_best_only=True)
     
     def create_dataset(self, config, module=None):
-        module = module or config.dataset.name.cls
-        return get_attribute(module, 'create', ['datasets','mlxm.datasets','mlxm.keras.datasets'])(config)
+        return datasets.get(module or config.dataset.name.cls, config)
 
     def create_optimizer(self, config, module=None):
         module = module or config.optimizer.cls
