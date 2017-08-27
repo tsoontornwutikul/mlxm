@@ -74,7 +74,8 @@ class TrainClassifierExperiment(BaseTrainClassifierExperiment):
         super()._run(config, status)
 
         # Record model performance before any training.
-        status.history.on_batch_end(0)
+        if config.history.enabled:
+            status.history.on_batch_end(0)
 
         self.log('Training classifier...')
         self.ds_classifier_iterator = self.ds.create_batch_iterator(which='train', batch_size=config.train.batch_size)
