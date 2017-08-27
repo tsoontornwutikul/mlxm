@@ -81,7 +81,9 @@ class TrainClassifierExperiment(BaseTrainClassifierExperiment):
         self.ds_classifier_iterator = self.ds.create_batch_iterator(which='train', batch_size=config.train.batch_size)
         h = self.classifier.fit_generator(self.ds_classifier_iterator, steps_per_epoch=1, epochs=config.train.batches.cls,
                                           callbacks=self.callbacks_classifier, verbose=config.verbose)
-        status.history_train_classifier.append(h)
+                                          
+        if config.history.enabled:
+            status.history_train_classifier.append(h)
 
     def _teardown(self, config, status, success):
         super()._teardown(config, status, success)
