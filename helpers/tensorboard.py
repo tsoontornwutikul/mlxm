@@ -1,7 +1,7 @@
 import glob
 import numpy as np
 import os
-from tensorflow.tensorboard.backend.event_processing.event_accumulator import EventAccumulator
+from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
 from . import get_first_existing_path, get_nth_matching_path
 from ..experiments import Experiment
 
